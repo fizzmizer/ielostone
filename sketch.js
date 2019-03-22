@@ -1,10 +1,19 @@
 function setup() {
-    createCanvas(500,500);
-    background('darkblue')
-    noStroke();
-    ellipse(200,200,30,30);
+    createCanvas(829,523);
 }
 
 function draw() {
-  // put drawing code here
+
+
+    if (mouseIsPressed) {
+        background(color(mouseX,mouseY,125));
+        fill(color(125,mouseY,mouseX));
+    } 
+    
+    else {
+        background(color(mouseY,125,mouseX));
+        fill(color(mouseX,mouseY,125));
+    }
+
+    ellipse(mouseX,mouseY,30,30);
 }
