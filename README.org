@@ -1,0 +1,32 @@
+# ielostone
+Site officiel de la FJC (Fédération du Jeu du Caillou)
+
+
+
+
+- html : listes déroulantes avce liste de joueurs (+ matricule) et calcul des points après match
+- interaction avec la base de données
+
+Quel format pour la base de donnée ?
+
+
+NOM (MATRICULE)
+[date, elo]
+[date, elo]
+[date, elo]
+[date, elo]
+[date, elo]
+[date, elo]
+[date, elo]
+
+
+
+- le logiciel : encode date du match (avec calendrier) nom des 2 joueurs (ça va prendre automatiquement leur elo actuel), ça renvoie l'elo après match, modifie la base de données en conséquence
+
+
+- Après un match : remplir un document type à renvoyer à la fédération (version papier signée par les deux joueurs)avec : noms, type de partie jouée, lieu, remarques sur le match (pour les archives)
+
+- sur le site : publier les archives, le classement complet, les stats de chaque joueur : totale transparence
+
+
+
