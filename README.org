@@ -17,7 +17,6 @@ NOM (MATRICULE)
 [date, elo]
 [date, elo]
 [date, elo]
-[date, elo]
 
 
 
