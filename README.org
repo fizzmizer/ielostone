@@ -85,22 +85,22 @@ Quel format pour la base de donnée ?
       + Get all entry from table *Joueurs_ELO*
     - Nombre de tables utilisées : 1
  2. Situation 2
-    - But : Afficher l'historique du joueurs **002**
-    - Process :
-      + Get **elo_history** and **id_match** for **002** from tables *Match_History*
-      + For each **id_match** dont **validée==True**, get **all_infos** from table *Match_Submit*
-    - Nombre de tables utilisées : 2
+    * But : Afficher l'historique du joueurs /002/
+    * Process :
+      + Get /elo_history/ and /id_match/ for /002/ from tables *Match_History*
+      + For each /id_match/ dont /validée==True/, get /all_infos/ from table *Match_Submit*
+    * Nombre de tables utilisées : 2
  3. Situation 3
     - But : Soumission des matchs après une semaine de vacance prise par le staff
     - Process :
-      * Get all entry from table *Match_submit* dont **validée==False** et print les infos pour un check (automatique ou non, à toi de voir)
-      * For each joueur in **Joueurs**.split(";"), get **elo** from table *JOUEURS_ELO* and calculate **new_elo**
-      * modification de **elo** dans *Joueurs_elo* add row in *Match_History* avec **id_match** et **mat_joueurs**
+      * Get all entry from table *Match_submit* dont /validée==False/ et print les infos pour un check (automatique ou non, à toi de voir)
+      * For each joueur in /Joueurs/.split(";"), get /elo/ from table *JOUEURS_ELO* and calculate /new_elo/
+      * modification de /elo/ dans *Joueurs_elo* add row in *Match_History* avec /id_match/ et /mat_joueurs/
     - Nombre de tables utilisées : 3
  4. Situation 4
     - But : Afficher l'ensemble des matchs joués
     - Process :
-      * Get all entry from table *Match_submit* dont **validée==True** et print les infos
+      * Get all entry from table *Match_submit* dont /validée==True/ et print les infos
     - Nombre de tables utilisées : 1
 
 Ça me semble assez bien otpimisé. Ça demande par contre d'avoir une database SQL.
