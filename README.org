@@ -28,7 +28,7 @@ Trois tables :
      * Joueurs : Ajout de "match entry"
      * Staff : Validation de "match entry" et suppression de ligne (invalide ou validée)
    + Data non permanente (car modifiable et supprimable)
-   + Forme :
+
 |----+------------+-------------------+---------------------+----------+--------------------+---------|
 | ID | Date       | Nombre de joueurs | Joueurs (matricule) | scores   | winner (matricule) | validée |
 |----+------------+-------------------+---------------------+----------+--------------------+---------|
@@ -47,6 +47,7 @@ Trois tables :
        * Joueurs : Vision par la page correspondante du site
        * Staff : Modification
      + Données permanente
+
 |------------+------------------+--------+--------|
 | Nom_joueur | Matricule_joueur | ELO    | Bannis |
 |------------+------------------+--------+--------|
@@ -60,6 +61,7 @@ Trois tables :
      * Joueurs : Vision par la page correspondante du site
      * Staff : Modification automatique après une validation de match (voir première table)
    + Données permanente
+
 |------------+----------+-------------|
 | mat_joueur | id_match | elo_history |
 |------------+----------+-------------|
@@ -70,6 +72,7 @@ Trois tables :
 |        002 |        1 |          45 |
 |        003 |        1 |       21104 |
 |------------+----------+-------------|
+
    + Notes : C'est une table intermédiaire qui permet très rapidement de faire le tri entre les joueurs et les match joués pour faire d'une pierre deux coup lors qu'on devra les afficher sur le site. Et ça évite de faire une table par joueurs ou de devoir modifier le nombre de colonne.
 
 # Utilisations typiques de la base de données avec ma proposition :
