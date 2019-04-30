@@ -6,9 +6,18 @@
     <h1>Submit Match</h1>
     
     <?php
-      echo '<form method="post" action="php/submit_match.php" enctype="multipart/form-data" style="border-style:solid; border-color:white; padding:10px;">';
+      echo '<form method="post" action="php/submit_match.php" enctype="multipart/form-data">';
       echo '<p>';
-      echo '<ins>Date:</ins> <input type="date" name="date"/> <br/><br/>';
+      echo '<ins>Date :</ins> <input type="date" name="date"/> <br/><br/>';
+      // TODO On garde l'option dispositif ?
+      echo '<ins>Dispositif (optionnel) :</ins>';
+      echo '<select name="dispositif">';
+      echo '<option value=""></option>';
+      echo '<option value="Brandelet">Brandelet</option>';
+      echo '<option value="Ducobu">Ducobu</option>';
+      echo '<option value="Fairplay">Fairplay</option>';
+      echo '</select></br>';
+
       
       // TODO : Gérer les nouveaux joueurs
       

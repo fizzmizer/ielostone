@@ -24,6 +24,8 @@ $scores_str = implode(";",$scores);
 // DEBUG
 // echo strtotime($date);
 // echo "<br/>";
+// echo $dispositif;
+// echo "<br/>";
 // echo $joueurs_str;
 // echo "<br/>";
 // echo $scores_str;
