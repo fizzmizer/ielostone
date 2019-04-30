@@ -1,14 +1,13 @@
 * ielostone
-Site officiel de la FJC (Fédération du Jeu du Caillou)
 
-
-
+** Site officiel de la FJC (Fédération du Jeu du Caillou)
 
 - html : listes déroulantes avce liste de joueurs (+ matricule) et calcul des points après match
 - interaction avec la base de données
 
-Quel format pour la base de donnée ?
+** Quel format pour la base de donnée ?
 
+~<SAM>~
 
 +NOM (MATRICULE)+
 +[date, elo]+
@@ -18,101 +17,103 @@ Quel format pour la base de donnée ?
 +[date, elo]+
 +[date, elo]+
 
-<SAM>
-* Proposition pour la base de données MYSQL :
+*** Proposition pour la base de données MYSQL :
 
-** Trois tables : 
- - Table Match_Submit
-   + Description : Regroupe l'ensemble des match soumis par les joueurs
-   + Permissions :
-     * Joueurs : Ajout de "match entry"
-     * Staff : Validation de "match entry" et suppression de ligne (invalide ou validée)
-   + Data non permanente (car modifiable et supprimable)
-   + Notes :
-     * Il y aura moyen de split les matricule grâce aux ";"
-     * Pour la colonne "validée" ça permet de trier les match à valider par le calcul d'elo et à n'afficher que ceux validé avec la database request
+**** Trois tables : 
+   - Table Match_Submit
+     + Description : Regroupe l'ensemble des match soumis par les joueurs
+     + Permissions :
+       * Joueurs : Ajout de "match entry"
+       * Staff : Validation de "match entry" et suppression de ligne (invalide ou validée)
+     + Data non permanente (car modifiable et supprimable)
+     + Notes :
+       * Il y aura moyen de split les matricule grâce aux ";"
+       * Pour la colonne "validée" ça permet de trier les match à valider par le calcul d'elo et à n'afficher que ceux validé avec la database request
 
- - Table Joueurs_ELO
-   + Description : Regroupe l'ensemble des joueurs et leurs infos (matricule, ELO, etc...)
-   + Permissions :
-     * Joueurs : Vision par la page correspondante du site
-     * Staff : Modification
-   + Données permanente
+   - Table Joueurs_ELO
+     + Description : Regroupe l'ensemble des joueurs et leurs infos (matricule, ELO, etc...)
+     + Permissions :
+       * Joueurs : Vision par la page correspondante du site
+       * Staff : Modification
+     + Données permanente
 
- - Table Match_Historique
-   + Description : Regroupe l'ensemble des matchs joués par chaque joueurs
-   + Permissions :
-     * Joueurs : Vision par la page correspondante du site
-     * Staff : Modification automatique après une validation de match (voir première table)
-   + Données permanente
-   + Notes : C'est une table intermédiaire qui permet très rapidement de faire le tri entre les joueurs et les match joués pour faire d'une pierre deux coup lors qu'on devra les afficher sur le site. Et ça évite de faire une table par joueurs ou de devoir modifier le nombre de colonne.
+   - Table Match_Historique
+     + Description : Regroupe l'ensemble des matchs joués par chaque joueurs
+     + Permissions :
+       * Joueurs : Vision par la page correspondante du site
+       * Staff : Modification automatique après une validation de match (voir première table)
+     + Données permanente
+     + Notes : C'est une table intermédiaire qui permet très rapidement de faire le tri entre les joueurs et les match joués pour faire d'une pierre deux coup lors qu'on devra les afficher sur le site. Et ça évite de faire une table par joueurs ou de devoir modifier le nombre de colonne.
 
-** Formes des Tables
+**** Formes des Tables
 
-*** MATCH_SUBMIT
-    |----+------------+-------------------+----------------------+----------+--------------------+---------|
-    | ID | Date       | Nombre de joueurs | Joueurs (matricule)  | scores   | winner (matricule) | validée |
-    |----+------------+-------------------+----------------------+----------+--------------------+---------|
-    | %d | mm/dd/yyyy |                %d | %s;%s;%s             | %d;%d;%d | %d                 | %bool   |
-    |  1 | 01/02/0013 |                 3 | fjc001;fjc002;fjc003 | 1;2;3    | fjc003             | True    |
-    |  2 | 02/02/0013 |                 2 | fjc002;fjc003        | 1;500    | fjc002             | False   |
-    |----+------------+-------------------+----------------------+----------+--------------------+---------|
+***** MATCH_SUBMIT
+      |----+------------+-------------------+----------------------+----------+--------------------+---------|
+      | ID | Date       | Nombre de joueurs | Joueurs (matricule)  | scores   | winner (matricule) | validée |
+      |----+------------+-------------------+----------------------+----------+--------------------+---------|
+      | %d | mm/dd/yyyy |                %d | %s;%s;%s             | %d;%d;%d | %d                 | %bool   |
+      |  1 | 01/02/0013 |                 3 | fjc001;fjc002;fjc003 | 1;2;3    | fjc003             | True    |
+      |  2 | 02/02/0013 |                 2 | fjc002;fjc003        | 1;500    | fjc002             | False   |
+      |----+------------+-------------------+----------------------+----------+--------------------+---------|
 
-*** JOUEURS_ELO
-    |------------+------------------+--------+--------|
-    | Nom_joueur | Matricule_joueur | ELO    | Bannis |
-    |------------+------------------+--------+--------|
-    | %s         | %s               | %d     | %bool  |
-    | Ludo       | fjc001           | 123456 | False  |
-    |------------+------------------+--------+--------|
+***** JOUEURS_ELO
+      |------------+------------------+--------+--------|
+      | Nom_joueur | Matricule_joueur | ELO    | Bannis |
+      |------------+------------------+--------+--------|
+      | %s         | %s               | %d     | %bool  |
+      | Ludo       | fjc001           | 123456 | False  |
+      |------------+------------------+--------+--------|
 
-*** MATCH_HISTORY
-    |------------+----------+-------------|
-    | mat_joueur | id_match | elo_history |
-    |------------+----------+-------------|
-    | %s         |       %d |          %d |
-    | fjc001     |        2 |       21345 |
-    | fjc002     |        2 |       21300 |
-    | fjc001     |        1 |       21355 |
-    | fjc002     |        1 |          45 |
-    | fjc003     |        1 |       21104 |
-    |------------+----------+-------------|
+***** MATCH_HISTORY
+      |------------+----------+-------------|
+      | mat_joueur | id_match | elo_history |
+      |------------+----------+-------------|
+      | %s         |       %d |          %d |
+      | fjc001     |        2 |       21345 |
+      | fjc002     |        2 |       21300 |
+      | fjc001     |        1 |       21355 |
+      | fjc002     |        1 |          45 |
+      | fjc003     |        1 |       21104 |
+      |------------+----------+-------------|
 
-** Utilisations typiques de la base de données avec ma proposition :
- 1. Situation 1
-    - But : Afficher la liste des joueurs :
-    - Process :
-      + Get all entry from table *Joueurs_ELO*
-    - Nombre de tables utilisées : 1
- 2. Situation 2
-    * But : Afficher l'historique du joueurs /fjc002/
-    * Process :
-      + Get /elo_history/ and /id_match/ for /fjc002/ from tables *Match_History*
-      + For each /id_match/ dont /validée==True/, get /all_infos/ from table *Match_Submit*
-    * Nombre de tables utilisées : 2
- 3. Situation 3
-    - But : Soumission des matchs après une semaine de vacance prise par le staff
-    - Process :
-      * Get all entry from table *Match_submit* dont /validée==False/ et print les infos pour un check (automatique ou non, à toi de voir)
-      * For each joueur in /Joueurs/.split(";"), get /elo/ from table *JOUEURS_ELO* and calculate /new_elo/
-      * modification de /elo/ dans *Joueurs_elo* add row in *Match_History* avec /id_match/ et /mat_joueurs/
-    - Nombre de tables utilisées : 3
- 4. Situation 4
-    - But : Afficher l'ensemble des matchs joués
-    - Process :
-      * Get all entry from table *Match_submit* dont /validée==True/ et print les infos
-    - Nombre de tables utilisées : 1
+**** Utilisations typiques de la base de données avec ma proposition :
+   1. Situation 1
+      - But : Afficher la liste des joueurs :
+      - Process :
+	+ Get all entry from table *Joueurs_ELO*
+      - Nombre de tables utilisées : 1
+   2. Situation 2
+      * But : Afficher l'historique du joueurs /fjc002/
+      * Process :
+	+ Get /elo_history/ and /id_match/ for /fjc002/ from tables *Match_History*
+	+ For each /id_match/ dont /validée==True/, get /all_infos/ from table *Match_Submit*
+      * Nombre de tables utilisées : 2
+   3. Situation 3
+      - But : Soumission des matchs après une semaine de vacance prise par le staff
+      - Process :
+	* Get all entry from table *Match_submit* dont /validée==False/ et print les infos pour un check (automatique ou non, à toi de voir)
+	* For each joueur in /Joueurs/.split(";"), get /elo/ from table *JOUEURS_ELO* and calculate /new_elo/
+	* modification de /elo/ dans *Joueurs_elo* add row in *Match_History* avec /id_match/ et /mat_joueurs/
+      - Nombre de tables utilisées : 3
+   4. Situation 4
+      - But : Afficher l'ensemble des matchs joués
+      - Process :
+	* Get all entry from table *Match_submit* dont /validée==True/ et print les infos
+      - Nombre de tables utilisées : 1
 
-Ça me semble assez bien otpimisé. Ça demande par contre d'avoir une database SQL.
+  Ça me semble assez bien otpimisé. Ça demande par contre d'avoir une database SQL.
 
-<SAM/>
+  ~<SAM/>~
 
-- le logiciel : encode date du match (avec calendrier) nom des 2 joueurs (ça va prendre automatiquement leur elo actuel), ça renvoie l'elo après match, modifie la base de données en conséquence
+** le logiciel 
+   Encode date du match (avec calendrier) nom des 2 joueurs (ça va prendre automatiquement leur elo actuel), ça renvoie l'elo après match, modifie la base de données en conséquence
 
 
-- Après un match : remplir un document type à renvoyer à la fédération (version papier signée par les deux joueurs)avec : noms, type de partie jouée, lieu, remarques sur le match (pour les archives)
+** Après un match
+   Remplir un document type à renvoyer à la fédération (version papier signée par les deux joueurs)avec : noms, type de partie jouée, lieu, remarques sur le match (pour les archives)
 
-- sur le site : publier les archives, le classement complet, les stats de chaque joueur : totale transparence
+** Sur le site 
+   publier les archives, le classement complet, les stats de chaque joueur : totale transparence
 
 
 
