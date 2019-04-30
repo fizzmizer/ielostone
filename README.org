@@ -50,32 +50,32 @@ Quel format pour la base de donnée ?
 ** Formes des Tables
 
 *** MATCH_SUBMIT
-    |----+------------+-------------------+---------------------+----------+--------------------+---------|
-    | ID | Date       | Nombre de joueurs | Joueurs (matricule) | scores   | winner (matricule) | validée |
-    |----+------------+-------------------+---------------------+----------+--------------------+---------|
-    | %d | mm/dd/yyyy |                %d | %d;%d;%d            | %d;%d;%d |                 %d | %bool   |
-    |  1 | 01/02/0003 |                 3 | 001;002;003         | 1;2;3    |                003 | True    |
-    |  2 | 02/02/0003 |                 2 | 002;003             | 1;500    |                002 | False   |
-    |----+------------+-------------------+---------------------+----------+--------------------+---------|
+    |----+------------+-------------------+----------------------+----------+--------------------+---------|
+    | ID | Date       | Nombre de joueurs | Joueurs (matricule)  | scores   | winner (matricule) | validée |
+    |----+------------+-------------------+----------------------+----------+--------------------+---------|
+    | %d | mm/dd/yyyy |                %d | %s;%s;%s             | %d;%d;%d | %d                 | %bool   |
+    |  1 | 01/02/0013 |                 3 | fjc001;fjc002;fjc003 | 1;2;3    | fjc003             | True    |
+    |  2 | 02/02/0013 |                 2 | fjc002;fjc003        | 1;500    | fjc002             | False   |
+    |----+------------+-------------------+----------------------+----------+--------------------+---------|
 
 *** JOUEURS_ELO
     |------------+------------------+--------+--------|
     | Nom_joueur | Matricule_joueur | ELO    | Bannis |
     |------------+------------------+--------+--------|
-    | %s         | %d               | %d     | %bool  |
-    | Ludo       | 001              | 123456 | False  |
+    | %s         | %s               | %d     | %bool  |
+    | Ludo       | fjc001           | 123456 | False  |
     |------------+------------------+--------+--------|
 
 *** MATCH_HISTORY
     |------------+----------+-------------|
     | mat_joueur | id_match | elo_history |
     |------------+----------+-------------|
-    |         %d |       %d |          %d |
-    |        001 |        2 |       21345 |
-    |        002 |        2 |       21300 |
-    |        001 |        1 |       21355 |
-    |        002 |        1 |          45 |
-    |        003 |        1 |       21104 |
+    | %s         |       %d |          %d |
+    | fjc001     |        2 |       21345 |
+    | fjc002     |        2 |       21300 |
+    | fjc001     |        1 |       21355 |
+    | fjc002     |        1 |          45 |
+    | fjc003     |        1 |       21104 |
     |------------+----------+-------------|
 
 ** Utilisations typiques de la base de données avec ma proposition :
@@ -85,9 +85,9 @@ Quel format pour la base de donnée ?
       + Get all entry from table *Joueurs_ELO*
     - Nombre de tables utilisées : 1
  2. Situation 2
-    * But : Afficher l'historique du joueurs /002/
+    * But : Afficher l'historique du joueurs /fjc002/
     * Process :
-      + Get /elo_history/ and /id_match/ for /002/ from tables *Match_History*
+      + Get /elo_history/ and /id_match/ for /fjc002/ from tables *Match_History*
       + For each /id_match/ dont /validée==True/, get /all_infos/ from table *Match_Submit*
     * Nombre de tables utilisées : 2
  3. Situation 3
