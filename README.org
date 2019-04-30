@@ -27,7 +27,7 @@
        * Staff : Validation de "match entry" et suppression de ligne (invalide ou validée)
      + Data non permanente (car modifiable et supprimable)
      + Notes :
-       * Il y aura moyen de split les matricule grâce aux ";"
+       * Il y aura moyen de split les matricule grâce aux ";" (split() en python et preg_split en php)
        * Pour la colonne "validée" ça permet de trier les match à valider par le calcul d'elo et à n'afficher que ceux validé avec la database request
 
    - Table Joueurs_ELO
@@ -92,7 +92,7 @@
       - But : Soumission des matchs après une semaine de vacance prise par le staff
       - Process :
 	* Get all entry from table *Match_submit* dont /validée==False/ et print les infos pour un check (automatique ou non, à toi de voir)
-	* For each joueur in /Joueurs/.split(";"), get /elo/ from table *JOUEURS_ELO* and calculate /new_elo/
+	* For each joueur in preg_split(";",/Joueurs/), get /elo/ from table *JOUEURS_ELO* and calculate /new_elo/
 	* modification de /elo/ dans *Joueurs_elo* add row in *Match_History* avec /id_match/ et /mat_joueurs/
       - Nombre de tables utilisées : 3
    4. Situation 4
@@ -118,7 +118,7 @@
 ** TODOLIST :
 *** Submit_page :
 **** TODO Options "nouveau joueur"
-     ajouter une option pour dynamiquement faire (il va falloir faire ça en javascript je crois -> voir point suivant)
+     Est-ce qu'on fait une page pour s'inscrire et qu'on puisse pas choisir ne nouveaux joueurs ?
 **** TODO Version javascript
      Pour plus de réactivité et éviter de reload la page quand on ajoute un nombre de joueur
 **** TODO Ajouter un peu de css et de forme à tout ça
