@@ -22,6 +22,8 @@ $joueurs_str = implode(";",$matricules);
 $scores_str = implode(";",$scores);
 
 // DEBUG
+// echo strtotime($date);
+// echo "<br/>";
 // echo $joueurs_str;
 // echo "<br/>";
 // echo $scores_str;
@@ -31,7 +33,7 @@ $scores_str = implode(";",$scores);
 // echo $winner;
 // DEBUG
 
-// $sql="INSERT INTO match_submit (date,nombre_joueur,joueurs,scores,winner,validation) VALUES ('$date','$number_player','$joueurs_str','$scores_str','$winner',FALSE)";
+// $sql="INSERT INTO match_submit (date,nombre_joueur,joueurs,scores,winner,validation) VALUES ('".strtotime($date)."','$number_player','$joueurs_str','$scores_str','$winner',FALSE)";
 // $req = mysql_query($sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysql_error());
 
 ?>

@@ -8,7 +8,7 @@
     <?php
       echo '<form method="post" action="php/submit_match.php" enctype="multipart/form-data" style="border-style:solid; border-color:white; padding:10px;">';
       echo '<p>';
-      echo '<ins>Date:</ins> <input type="date" name="_date"/> <br/><br/>';
+      echo '<ins>Date:</ins> <input type="date" name="date"/> <br/><br/>';
       
       // TODO : Gérer les nouveaux joueurs
       
