@@ -115,5 +115,11 @@
 ** Sur le site 
    publier les archives, le classement complet, les stats de chaque joueur : totale transparence
 
-
+** TODOLIST :
+*** Submit_page :
+**** TODO Options "nouveau joueur"
+     ajouter une option pour dynamiquement faire (il va falloir faire ça en javascript je crois -> voir point suivant)
+**** TODO Version javascript
+     Pour plus de réactivité et éviter de reload la page quand on ajoute un nombre de joueur
+**** TODO Ajouter un peu de css et de forme à tout ça
 
