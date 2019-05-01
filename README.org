@@ -48,33 +48,33 @@
 **** Formes des Tables
 
 ***** MATCH_SUBMIT
-      |----+----------------+-------------+------------------------+----------------------+----------+--------------------+---------+---+---|
-      | id |           date | num_joueurs | dispositif (optionnel) | joueurs (matricule)  | scores   | winner (matricule) | checked |   |   |
-      |----+----------------+-------------+------------------------+----------------------+----------+--------------------+---------+---+---|
-      | %d | %d (timestamp) |          %d | %s                     | %s;%s;%s             | %d;%d;%d | %d                 | %bool   |   |   |
-      |  1 |     1000166400 |           3 | Brandelet              | fjc001;fjc002;fjc003 | 1;2;3    | fjc003             | True    |   |   |
-      |  2 |      764467200 |           2 |                        | fjc002;fjc003        | 1;500    | fjc002             | False   |   |   |
-      |----+----------------+-------------+------------------------+----------------------+----------+--------------------+---------+---+---|
+      |----+----------------+--------------+------------------------+----------------------+----------+--------------------+---------|
+      | ID |           Date | NombreJoueur | Dispositif (optionnel) | Joueurs (matricule)  | Scores   | Winner (matricule) | Checked |
+      |----+----------------+--------------+------------------------+----------------------+----------+--------------------+---------|
+      | %d | %d (timestamp) |           %d | %s                     | %s;%s;%s             | %d;%d;%d | %d                 | %bool   |
+      |  1 |     1000166400 |            3 | Brandelet              | fjc001;fjc002;fjc003 | 1;2;3    | fjc003             | True    |
+      |  2 |      764467200 |            2 |                        | fjc002;fjc003        | 1;500    | fjc002             | False   |
+      |----+----------------+--------------+------------------------+----------------------+----------+--------------------+---------|
 
 ***** JOUEURS_ELO
-      |------------+------------------+--------+--------|
-      | Nom_joueur | Matricule_joueur | ELO    | Bannis |
-      |------------+------------------+--------+--------|
-      | %s         | %s               | %d     | %bool  |
-      | Ludo       | fjc001           | 123456 | False  |
-      |------------+------------------+--------+--------|
+      |-----------+-----------------+--------+-------|
+      | NomJoueur | MatriculeJoueur | ELO    | Banni |
+      |-----------+-----------------+--------+-------|
+      | %s        | %s              | %d     | %bool |
+      | Ludo      | fjc001          | 123456 | False |
+      |-----------+-----------------+--------+-------|
 
 ***** MATCH_HISTORY
-      |------------+----------+-------------|
-      | mat_joueur | id_match | elo_history |
-      |------------+----------+-------------|
-      | %s         |       %d |          %d |
-      | fjc001     |        2 |       21345 |
-      | fjc002     |        2 |       21300 |
-      | fjc001     |        1 |       21355 |
-      | fjc002     |        1 |          45 |
-      | fjc003     |        1 |       21104 |
-      |------------+----------+-------------|
+      |-----------------+---------+-------|
+      | MatriculeJoueur | IDMatch |   ELO |
+      |-----------------+---------+-------|
+      | %s              |      %d |    %d |
+      | fjc001          |       2 | 21345 |
+      | fjc002          |       2 | 21300 |
+      | fjc001          |       1 | 21355 |
+      | fjc002          |       1 |    45 |
+      | fjc003          |       1 | 21104 |
+      |-----------------+---------+-------|
 
 **** Utilisations typiques de la base de données avec ma proposition :
    1. Situation 1
@@ -107,7 +107,6 @@
 
 ** le logiciel 
    Encode date du match (avec calendrier) nom des 2 joueurs (ça va prendre automatiquement leur elo actuel), ça renvoie l'elo après match, modifie la base de données en conséquence
-
 
 ** Après un match
    Remplir un document type à renvoyer à la fédération (version papier signée par les deux joueurs)avec : noms, type de partie jouée, lieu, remarques sur le match (pour les archives)
