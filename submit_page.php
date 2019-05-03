@@ -27,8 +27,8 @@
       // Get the array from the database :
       require "php/database_id.php";
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
-      $sql="SELECT Nom, Prenom, Matricule FROM Joueurs";
-$req=mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+      $sql = "SELECT Nom, Prenom, Matricule FROM Joueurs";
+      $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
       
       while($data=mysqli_fetch_assoc($req)){
           $joueurs[$data["Nom"]." ".$data["Prenom"]]=$data["Matricule"];
