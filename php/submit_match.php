@@ -1,7 +1,8 @@
 <?php
 
 require "database_id.php";
-$con=mysqli_connect(DB_host,DB_login,DB_password,DB_database);
+
+$con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
 
 extract($_POST);
 
@@ -27,8 +28,8 @@ $scores_str = implode(";",$scores);
 // DEBUG
 
 
-$sql="INSERT INTO Submit (Date,Joueurs,Scores,Dispositif) VALUES ('$date','$joueurs_str','$scores_str','$dispositif')";
-$req=mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+$sql = "INSERT INTO Submit (Date,Joueurs,Scores,Dispositif) VALUES ('$date','$joueurs_str','$scores_str','$dispositif')";
+$req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
 
 mysqli_close($con);
 header('Location:../index.html');

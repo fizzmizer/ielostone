@@ -29,5 +29,4 @@ $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_err
 mysqli_close($con);
 header("Location:../check_submit_page.php");
 
-
 ?>
