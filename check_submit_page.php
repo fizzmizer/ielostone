@@ -11,7 +11,7 @@
       require "php/database_id.php";
 
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
-      $sql = "SELECT * FROM Submit WHERE Checked = 0 ";
+      $sql = "SELECT * FROM Submit WHERE Checked = FALSE ";
 
       $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
       $num=1;
@@ -35,6 +35,7 @@
           echo '<input type="hidden" name="date" value="'.$data["Date"].'">';
           echo '<input type="hidden" name="dispositif" value="'.$data["Dispositif"].'">';
           echo '<input type="hidden" name="joueurs" value="'.$data["Joueurs"].'">';
+          echo '<input type="hidden" name="id" value="'.$data["ID"].'">';
           echo '<input type="hidden" name="scores" value="'.$data["Scores"].'">';
           echo '<input type="submit" value="Valide"/>';
           echo '</form>';
@@ -45,6 +46,8 @@
           echo '</div>';
           $num++;
       }
+
+      mysqli_close($con);
       
     ?>
 

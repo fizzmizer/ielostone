@@ -30,6 +30,7 @@ $scores_str = implode(";",$scores);
 $sql="INSERT INTO Submit (Date,Joueurs,Scores,Dispositif) VALUES ('$date','$joueurs_str','$scores_str','$dispositif')";
 $req=mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
 
+mysqli_close($con);
 header('Location:../index.html');
 
 ?>

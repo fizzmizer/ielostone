@@ -63,6 +63,9 @@
       echo '</p>';
       echo '<input type="submit" value="Send"/>';
       echo '</form>';
+
+      mysqli_close($con);
+
     ?>
 
 
