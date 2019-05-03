@@ -20,7 +20,7 @@
 *** Proposition pour la base de données MYSQL :
 
 **** Trois tables : 
-   - Table Match_Submit
+   - Table SubmitTable
      + Description : Regroupe l'ensemble des match soumis par les joueurs
      + Permissions :
        * Joueurs : Ajout de "match entry"
@@ -30,14 +30,14 @@
        * Il y aura moyen de split les matricule grâce aux ";" (split(";") en python et explode(";") en php)
        * Pour la colonne "validée" ça permet de trier les match à valider par le calcul d'elo et à n'afficher que ceux validé avec la database request
 
-   - Table Joueurs_ELO
+   - Table PlayerTable
      + Description : Regroupe l'ensemble des joueurs et leurs infos (matricule, ELO, etc...)
      + Permissions :
        * Joueurs : Vision par la page correspondante du site
        * Staff : Modification
      + Données permanente
 
-   - Table Match_Historique
+   - Table HistoryTable
      + Description : Regroupe l'ensemble des matchs joués par chaque joueurs
      + Permissions :
        * Joueurs : Vision par la page correspondante du site
@@ -47,58 +47,58 @@
 
 **** Formes des Tables
 
-***** MATCH_SUBMIT
-      |----+----------------+--------------+------------------------+----------------------+----------+--------------------+---------|
-      | ID |           Date | NombreJoueur | Dispositif (optionnel) | Joueurs (matricule)  | Scores   | Winner (matricule) | Checked |
-      |----+----------------+--------------+------------------------+----------------------+----------+--------------------+---------|
-      | %d | %d (timestamp) |           %d | %s                     | %s;%s;%s             | %d;%d;%d | %d                 | %bool   |
-      |  1 |     1000166400 |            3 | Brandelet              | fjc001;fjc002;fjc003 | 1;2;3    | fjc003             | True    |
-      |  2 |      764467200 |            2 |                        | fjc002;fjc003        | 1;500    | fjc002             | False   |
-      |----+----------------+--------------+------------------------+----------------------+----------+--------------------+---------|
+***** Submit
+      |----+---------------+------------------------+----------------------+----------+---------|
+      | ID |          Date | Dispositif (optionnel) | Joueurs (matricule)  | Scores   | Checked |
+      |----+---------------+------------------------+----------------------+----------+---------|
+      | %d | %d (datetime) | %s                     | %s;%s;%s             | %d;%d;%d |   %bool |
+      |  1 |    1000166400 | Brandelet              | fjc001;fjc002;fjc003 | 1;2;3    |       1 |
+      |  2 |     764467200 |                        | fjc002;fjc003        | 1;500    |       0 |
+      |----+---------------+------------------------+----------------------+----------+---------|
 
-***** JOUEURS_ELO
-      |-----------+-----------------+--------+-------|
-      | NomJoueur | MatriculeJoueur | ELO    | Banni |
-      |-----------+-----------------+--------+-------|
-      | %s        | %s              | %d     | %bool |
-      | Ludo      | fjc001          | 123456 | False |
-      |-----------+-----------------+--------+-------|
+***** Player
+      |------+--------+-----------+--------+-------------|
+      | Nom  | Prénom | Matricule | ELO    | Banni       |
+      |------+--------+-----------+--------+-------------|
+      | %s   | %s     | %s        | %d     | %bool (0 1) |
+      | Duco | Ludo   | fjc001    | 123456 | 0           |
+      |------+--------+-----------+--------+-------------|
 
-***** MATCH_HISTORY
-      |-----------------+---------+-------|
-      | MatriculeJoueur | IDMatch |   ELO |
-      |-----------------+---------+-------|
-      | %s              |      %d |    %d |
-      | fjc001          |       2 | 21345 |
-      | fjc002          |       2 | 21300 |
-      | fjc001          |       1 | 21355 |
-      | fjc002          |       1 |    45 |
-      | fjc003          |       1 | 21104 |
-      |-----------------+---------+-------|
+***** History
+      |-----------+----------+------------|
+      | Matricule | SubmitID | ELOHistory |
+      |-----------+----------+------------|
+      | %s        |       %d |         %d |
+      | fjc001    |        2 |      21345 |
+      | fjc002    |        2 |      21300 |
+      | fjc001    |        1 |      21355 |
+      | fjc002    |        1 |         45 |
+      | fjc003    |        1 |      21104 |
+      |-----------+----------+------------|
 
 **** Utilisations typiques de la base de données avec ma proposition :
    1. Situation 1
       - But : Afficher la liste des joueurs :
       - Process :
-	+ Get all entry from table *Joueurs_ELO*
+	+ Get all entry from table *PlayerTable*
       - Nombre de tables utilisées : 1
    2. Situation 2
       * But : Afficher l'historique du joueurs /fjc002/
       * Process :
-	+ Get /elo_history/ and /id_match/ for /fjc002/ from tables *Match_History*
-	+ For each /id_match/ dont /validée==True/, get /all_infos/ from table *Match_Submit*
+	+ Get /ELO/ and /ID/ for /fjc002/ from tables *HistoryTable*
+	+ For each /ID/ dont /Checked==True/, get /all/ from table *SubmitTable*
       * Nombre de tables utilisées : 2
    3. Situation 3
       - But : Soumission des matchs après une semaine de vacance prise par le staff
       - Process :
-	* Get all entry from table *Match_submit* dont /validée==False/ et print les infos pour un check (automatique ou non, à toi de voir)
-	* For each joueur in explode(";",/Joueurs/), get /elo/ from table *JOUEURS_ELO* and calculate /new_elo/
-	* modification de /elo/ dans *Joueurs_elo* add row in *Match_History* avec /id_match/ et /mat_joueurs/
+	* Get all entry from table *SubmitTable* dont /Checked==False/ et print les infos pour un check (automatique ou non, à toi de voir)
+	* For each joueur in explode(";",/Joueurs/), get /ELO/ from table *PlayerTable* and calculate /new_elo/
+	* modification de /ELO/ dans *PlayerTable* et add row in *HistoryTable* avec /ID/ (auto increment) et /Joueurs/
       - Nombre de tables utilisées : 3
    4. Situation 4
       - But : Afficher l'ensemble des matchs joués
       - Process :
-	* Get all entry from table *Match_submit* dont /validée==True/ et print les infos
+	* Get all entry from table *SubmitTable* dont /Checked==True/ et print les infos
       - Nombre de tables utilisées : 1
 
   Ça me semble assez bien otpimisé. Ça demande par contre d'avoir une database SQL.

@@ -1,0 +1,9 @@
+* Petit mémo pour créer les tables SQL de ielostone
+** Submit
+CREATE TABLE Submit ( ID int NOT NULL AUTO_INCREMENT, Date datetime NOT NULL, Joueurs varchar(255) NOT NULL, Scores varchar(255) NOT NULL, Dispositif varchar(255), Checked bit DEFAULT 0 NOT NULL, PRIMARY KEY (ID));
+
+** Joueurs
+CREATE TABLE Joueurs ( Matricule varchar(255) NOT NULL, Nom varchar(255) NOT NULL, Prenom varchar(255) NOT NULL, ELO int NOT NULL, Banned bit DEFAULT 1 NOT NULL, PRIMARY KEY (Matricule));
+
+** History (Associative table)
+CREATE TABLE History ( Matricule varchar(255) NOT NULL, SubmitID int NOT NULL, ELOHistory int NOT NULL, FOREIGN KEY (Matricule) REFERENCES Joueurs(Matricule), FOREIGN KEY (SubmitID) REFERENCES Submit(ID));
