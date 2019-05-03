@@ -3,11 +3,12 @@
     <title>Submit Match</title>
   </head>
   <body>
+    <a href="../index.html">Back to index</a>
     <h1>Submit Match</h1>
 
     <?php
 
-      require "php/database_id.php";
+      require "../php/database_id.php";
 
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
       $sql="SELECT Nom,Prenom,ELO FROM Joueurs WHERE Banned=FALSE";

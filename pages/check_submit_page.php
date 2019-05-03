@@ -3,12 +3,12 @@
     <title>Check Submitted match</title>
   </head>
   <body>
-    <a href="index.html">Back to index</a>
+    <a href="../index.html">Back to index</a>
     <h1>Check Submitted match</h1>
     
     <?php
       
-      require "php/database_id.php";
+      require "../php/database_id.php";
 
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
       $sql = "SELECT * FROM Submit WHERE Checked = FALSE ";
@@ -31,7 +31,7 @@
               echo "fjc-00".$joueurs[$i]," : ",$scores[$i],"<br/>";
           }
           echo '<br/>';
-          echo '<form method="post" action="php/validate_match.php" enctype="multipart/form-data">';
+          echo '<form method="post" action="../php/validate_match.php" enctype="multipart/form-data">';
           echo '<input type="hidden" name="date" value="'.$data["Date"].'">';
           echo '<input type="hidden" name="dispositif" value="'.$data["Dispositif"].'">';
           echo '<input type="hidden" name="joueurs" value="'.$data["Joueurs"].'">';
@@ -39,7 +39,7 @@
           echo '<input type="hidden" name="scores" value="'.$data["Scores"].'">';
           echo '<input type="submit" value="Valide"/>';
           echo '</form>';
-          echo '<form method="post" action="php/delete_match.php" enctype="multipart/form-data">';
+          echo '<form method="post" action="../php/delete_match.php" enctype="multipart/form-data">';
           echo '<input type="hidden" name="id" value="'.$data["ID"].'">';
           echo '<input type="submit" value="Non Valide (DELETE)"/>';
           echo '</form>';

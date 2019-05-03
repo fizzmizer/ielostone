@@ -3,11 +3,11 @@
     <title>Submit Match</title>
   </head>
   <body>
-    <a href="index.html">Back to index</a>
+    <a href="../index.html">Back to index</a>
     <h1>Submit Match</h1>
     
     <?php
-      echo '<form method="post" action="php/submit_match.php" enctype="multipart/form-data">';
+      echo '<form method="post" action="../php/submit_match.php" enctype="multipart/form-data">';
       echo '<p>';
       echo '<ins>Date :</ins> <input type="date" name="date"/> <br/><br/>';
       // QUESTION On garde l'option dispositif ?
@@ -26,7 +26,7 @@
       // $joueurs=array("Ludovic"=>"fjc-001","Antoine"=>"fjc-002","Samuel"=>"fjc-003");
 
       // Get the array from the database :
-      require "php/database_id.php";
+      require "../php/database_id.php";
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
       $sql = "SELECT Nom, Prenom, Matricule FROM Joueurs";
       $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
