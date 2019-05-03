@@ -3,6 +3,7 @@
     <title>Check Submitted match</title>
   </head>
   <body>
+    <a href="index.html">Back to index</a>
     <h1>Check Submitted match</h1>
     
     <?php
