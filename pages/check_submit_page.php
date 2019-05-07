@@ -32,8 +32,6 @@
           }
           echo '<br/>';
           echo '<form method="post" action="../php/validate_match.php" enctype="multipart/form-data">';
-          echo '<input type="hidden" name="date" value="'.$data["Date"].'">';
-          echo '<input type="hidden" name="dispositif" value="'.$data["Dispositif"].'">';
           echo '<input type="hidden" name="joueurs" value="'.$data["Joueurs"].'">';
           echo '<input type="hidden" name="id" value="'.$data["ID"].'">';
           echo '<input type="hidden" name="scores" value="'.$data["Scores"].'">';
