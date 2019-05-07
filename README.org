@@ -57,12 +57,12 @@
       |----+---------------+------------------------+---------------------+---------------+---------|
 
 ***** Player
-      |------+--------+-----------+--------+-------------|
-      | Nom  | Prénom | Matricule | ELO    | Banni       |
-      |------+--------+-----------+--------+-------------|
-      | %s   | %s     | %int      | %int   | %bool (0 1) |
-      | Duco | Ludo   | 1         | 123456 | 0           |
-      |------+--------+-----------+--------+-------------|
+      |-----------+------+--------+--------+-------------|
+      | Matricule | Nom  | Prénom | ELO    | Banni       |
+      |-----------+------+--------+--------+-------------|
+      | %int      | %s   | %s     | %int   | %bool (0 1) |
+      | 1         | Duco | Ludo   | 123456 | 0           |
+      |-----------+------+--------+--------+-------------|
 
 ***** History
       |-----------+----------+------------|
@@ -122,3 +122,15 @@
      Pour plus de réactivité et éviter de reload la page quand on ajoute un nombre de joueur
 **** TODO Ajouter un peu de css et de forme à tout ça
 
+
+** Calcul d'elo
+
+   p1W = 1/(1+10^(elo2 - elo1)/400)
+   p2W = 1/(1+10^(elo1 - elo2)/400)
+
+   i contre j -> i gagne
+   new_elo i += 32(1-PiW)
+   new_elo j += 32(0-PiW)
+
+   GAGNANT gagne au MAX(perdants)
+   PERDANTS perd au MIN(Gens au dessus du classement)

@@ -1,10 +1,10 @@
 <html>
   <head>
-    <title>Submit Match</title>
+    <title>Liste des joueurs</title>
   </head>
   <body>
     <a href="../index.html">Back to index</a>
-    <h1>Submit Match</h1>
+    <h1>Liste des joueurs</h1>
 
     <?php
 
