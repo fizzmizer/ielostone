@@ -91,10 +91,10 @@ for($i=0;$i<count($bigArray);$i++){
     $bigArray[$i]['New_ELO']=$new_elo[$i];
 }
 
-// DEBUG
-foreach($bigArray as $entry){
-    echo $entry['Score']," ",$entry['Old_ELO']," ",$entry['Matricule']," ",$entry['New_ELO'],"</br>";
-}
+// // DEBUG
+// foreach($bigArray as $entry){
+//     echo $entry['Score']," ",$entry['Old_ELO']," ",$entry['Matricule']," ",$entry['New_ELO'],"</br>";
+// }
 
 $sql="UPDATE Submit SET Checked = TRUE WHERE ID=$id; ";
 

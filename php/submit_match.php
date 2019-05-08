@@ -16,18 +16,6 @@ for($i=1;$i<=$number_player;$i++){
 $joueurs_str = implode(",",$matricules);
 $scores_str = implode(",",$scores);
 
-// DEBUG
-// echo strtotime($date);
-// echo "<br/>";
-// echo $dispositif;
-// echo "<br/>";
-// echo $joueurs_str;
-// echo "<br/>";
-// echo $scores_str;
-// echo "<br/>";
-// DEBUG
-
-
 $sql = "INSERT INTO Submit (Date,Joueurs,Scores,Dispositif) VALUES ('$date','$joueurs_str','$scores_str','$dispositif')";
 $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
 

@@ -10,7 +10,6 @@
       echo '<form method="post" action="../php/submit_match.php" enctype="multipart/form-data">';
       echo '<p>';
       echo '<ins>Date :</ins> <input type="date" name="date"/> <br/><br/>';
-      // QUESTION On garde l'option dispositif ?
       echo '<ins>Dispositif (optionnel) :</ins>';
       echo '<select name="dispositif">';
       echo '<option value=""></option>';
@@ -19,16 +18,10 @@
       echo '<option value="Fairplay">Fairplay</option>';
       echo '</select></br>';
 
-      
-      // TODO : Gérer les nouveaux joueurs
-
-      // FOR DEBUG (without database)
-      // $joueurs=array("Ludovic"=>"fjc-001","Antoine"=>"fjc-002","Samuel"=>"fjc-003");
-
       // Get the array from the database :
       require "../php/database_id.php";
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
-      $sql = "SELECT Nom, Prenom, Matricule FROM Joueurs";
+      $sql = "SELECT Nom, Prenom, Matricule FROM Joueurs WHERE Banned = FALSE AND Approved = TRUE";
       $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
       
       while($data=mysqli_fetch_assoc($req)){
@@ -66,8 +59,7 @@
 
       mysqli_close($con);
 
-    ?>
-
-
-</body>
+?>
+    
+  </body>
 </html>

@@ -11,9 +11,26 @@
       require "../php/database_id.php";
 
       $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
-      $sql = "SELECT * FROM Submit WHERE Checked = FALSE ";
+      echo"<h1>Player check</h1>";
+      
+      $sql = "SELECT Prenom,Nom,Matricule FROM Joueurs WHERE Approved = FALSE ";
 
       $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+
+      $num=1;
+      while($data=mysqli_fetch_assoc($req)){
+          echo "<ins>Joueur ",$num,"</ins> :",$data['Prenom']," ",$data['Nom'];
+          echo ' <a href="../php/add_player.php?mat='.$data['Matricule'].'">Approuver</a> ';
+          echo ' <a href="../php/del_player.php?mat='.$data['Matricule'].'">Supprimer</a> ';
+          echo '<br/>';
+      }
+      
+      $sql = "SELECT ID,Date,Joueurs,Scores,Dispositif FROM Submit WHERE Checked = FALSE ";
+
+      $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+
+      echo "<h1>Match check</h1>";
+
       $num=1;
       while($data=mysqli_fetch_assoc($req)){
           $joueurs=explode(",",$data["Joueurs"]);
