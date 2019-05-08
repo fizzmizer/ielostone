@@ -104,14 +104,10 @@
 
 ** TODOLIST :
 *** TODO Page joueurs:
-**** TODO Voir la liste des match joués, en forme de liens
 **** TODO Voir le graphe de l'elo
-*** TODO Page de l'historique des matchs:
+*** DONE Page de l'historique des matchs:
 **** Page général regroupant l'ensemble des matchs
-*** TODO Page d'un match 
-**** Liens de la page des joueurs sur les nom des participants
-**** Page donnant les détails d'un match
-*** Submit_page :
+*** TODO Submit_page :
 **** TODO Version javascript
 ***** AJAX search pour les joueurs
 	Pour plus de réactivité et éviter de reload la page quand on ajoute un nombre de joueur
