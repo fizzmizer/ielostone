@@ -1,65 +1,59 @@
-<html>
-  <head>
-    <title>Submit Match</title>
-  </head>
-  <body>
-    <a href="../index.html">Back to index</a>
-    <h1>Submit Match</h1>
-    
-    <?php
-      echo '<form method="post" action="../php/submit_match.php" enctype="multipart/form-data">';
-      echo '<p>';
-      echo '<ins>Date :</ins> <input type="date" name="date"/> <br/><br/>';
-      echo '<ins>Dispositif (optionnel) :</ins>';
-      echo '<select name="dispositif">';
-      echo '<option value=""></option>';
-      echo '<option value="Brandelet">Brandelet</option>';
-      echo '<option value="Ducobu">Ducobu</option>';
-      echo '<option value="Fairplay">Fairplay</option>';
-      echo '</select></br>';
+<?php
+require "../php/database_id.php";
+$con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
+$sql = "SELECT Nom, Prenom, Matricule FROM Joueurs WHERE Banned = FALSE AND Approved = TRUE";
+$req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
 
-      // Get the array from the database :
-      require "../php/database_id.php";
-      $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
-      $sql = "SELECT Nom, Prenom, Matricule FROM Joueurs WHERE Banned = FALSE AND Approved = TRUE";
-      $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
-      
-      while($data=mysqli_fetch_assoc($req)){
-          $joueurs[$data["Nom"]." ".$data["Prenom"]]=$data["Matricule"];
-      }
-      
-      $nj=$_GET["nj"];
-      
-      if(!$nj){
-          $nj=2;             
-      }
-      
-      for($i=1;$i<=$nj;$i++){    
-          echo "<ins>Joueur $i :</ins><br/>";
-          echo "Nom :";
-          echo "<select name=\"mat$i\">";
-          echo "<option value=\"\"></option>";
-          foreach($joueurs as $name => $mat){
-              echo "<option value=\"$mat\">$name</option>";
-          }
-          echo "</select></br>";
-          echo "Score : <input type=\"number\" name=\"score$i\" autocomplete=\"off\" /> <br/>";
-          echo "</br>";
-      }
-      $njadd=$nj+1;
-      $njrem=$nj-1;
-      echo "<a href=\"submit_page.php?nj=$njadd\" >Add player</a></br>";
-      if($nj>2){
-          echo "<a href=\"submit_page.php?nj=$njrem\" >Remove Player</a>";
-      }
-      echo "<input type=\"hidden\" name=\"number_player\" value=\"$nj\">";
-      echo '</p>';
-      echo '<input type="submit" value="Send"/>';
-      echo '</form>';
+while($data=mysqli_fetch_assoc($req)){
+    $joueurs[$data["Nom"]." ".$data["Prenom"]]=$data["Matricule"];
+}
 
-      mysqli_close($con);
+mysqli_close($con);
+
+$nj=(isset($_GET["nj"])) ? $_GET["nj"] : 2;
+$njadd=$nj+1;
+$njrem=$nj-1;
 
 ?>
-    
-  </body>
+
+<html>
+    <head>
+	<title>Submit Match</title>
+    </head>
+    <body>
+	<a href="../index.html">Back to index</a>
+	<h1>Submit Match</h1>
+	
+	<form method="post" action="../php/submit_match.php" enctype="multipart/form-data">
+	    <ins>Date :</ins> <input type="date" name="date"/> <br/><br/>
+	    <ins>Dispositif (optionnel) :</ins>
+	    <select name="dispositif">
+		<option value=""></option>
+		<option value="Brandelet">Brandelet</option>
+		<option value="Ducobu">Ducobu</option>
+		<option value="Fairplay">Fairplay</option>
+	    </select></br>
+
+	    <?php for($i=1;$i<=$nj;$i++): ?>
+		<ins>Joueur <?php echo $i; ?> :</ins><br/>
+		Nom :
+		<select name="mat<?php echo $i; ?>">
+		    <option value=""></option>
+		    <?php foreach($joueurs as $name => $mat): ?>
+			<option value="<?php echo $mat; ?>"><?php echo $name; ?></option>
+		    <?php endforeach; ?>
+		</select> </br>
+		Score : <input type="number" name="score<?php echo $i; ?>" autocomplete="off" />
+		<br/>
+		<br/>
+	    <?php endfor; ?>
+	    <a href="submit_page.php?nj=<?php echo $njadd; ?>" >Add player</a></br>
+	    <?php if($nj>2): ?>
+		<a href="submit_page.php?nj=<?php echo $njrem; ?>" >Remove Player</a>
+	    <?php endif; ?>
+	    <input type="hidden" name="number_player" value="<?php echo $nj; ?>">
+	    <input type="submit" value="Send"/>
+	</form>
+	
+    </body>
 </html>
