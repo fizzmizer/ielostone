@@ -1,71 +1,66 @@
 <html>
-  <head>
-    <title>Check Submitted match</title>
-  </head>
-  <body>
-    <a href="../index.html">Back to index</a>
-    <h1>Check Submitted match</h1>
-    
-    <?php
-      
-      require "../php/database_id.php";
+    <head>
+	<title>Check Submitted match</title>
+    </head>
+    <body>
+	<a href="../index.html">Back to index</a>
+	<h1>Check Submitted match</h1>
+	<?php
+	require "../php/database_id.php";
+	$con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
+	$sql = "SELECT Prenom,Nom,Matricule FROM Joueurs WHERE Approved = FALSE ";
+	$req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+	$num=1;
+	?>
+	<h1>Player check</h1>
 
-      $con = mysqli_connect(DB_host,DB_login,DB_password,DB_database);
-      echo"<h1>Player check</h1>";
-      
-      $sql = "SELECT Prenom,Nom,Matricule FROM Joueurs WHERE Approved = FALSE ";
+	<?php while($data=mysqli_fetch_assoc($req)): ?>
+	    <ins>Joueur <?php echo $num++; ?></ins> :<?php echo $data['Prenom']; ?> <?php echo $data['Nom']; ?>
+	    <a href="../php/add_player.php?mat=<?php echo $data['Matricule']; ?>">Approuver</a>
+	    <a href="../php/del_player.php?mat=<?php echo $data['Matricule']; ?>">Supprimer</a>
+	    <br/>
+	<?php endwhile; ?>
 
-      $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+	<?php 
+        $sql = "SELECT ID,Date,Joueurs,Scores,Dispositif FROM Submit WHERE Checked = FALSE ";
+	$req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+	$num=1;
+	?>
+	<h1>Match check</h1>
+	<?php while($data=mysqli_fetch_assoc($req)): ?>
+	    
+            <?php
+	    $joueurs=explode(",",$data["Joueurs"]);
+            $scores=explode(",",$data["Scores"]);
+	    ?>
+	    
+	    <div id="submission">
+		
+		<h2>Submission <?php echo $num++; ?> :</h2>
 
-      $num=1;
-      while($data=mysqli_fetch_assoc($req)){
-          echo "<ins>Joueur ",$num,"</ins> :",$data['Prenom']," ",$data['Nom'];
-          echo ' <a href="../php/add_player.php?mat='.$data['Matricule'].'">Approuver</a> ';
-          echo ' <a href="../php/del_player.php?mat='.$data['Matricule'].'">Supprimer</a> ';
-          echo '<br/>';
-      }
-      
-      $sql = "SELECT ID,Date,Joueurs,Scores,Dispositif FROM Submit WHERE Checked = FALSE ";
+		<ins>Date :</ins> <?php echo $data["Date"]; ?> <br/>
+		<ins>Dispositif :</ins> <?php echo $data["Dispositif"]; ?> <br/>
+		<ins>Joueur | Score :</ins> <br/>
+		<?php for($i=0;$i<count($joueurs);$i++): ?>
+		    fjc-00 <?php echo $joueurs[$i]; ?> : <?php echo $scores[$i]; ?> <br/>
+		<?php endfor; ?>
+		<br/>
 
-      $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
+		<form method="post" action="../php/validate_match.php" enctype="multipart/form-data">
+		    <input type="hidden" name="joueurs" value="<?php echo $data["Joueurs"]; ?>">
+		    <input type="hidden" name="id" value="<?php echo $data["ID"]; ?>">
+		    <input type="hidden" name="scores" value="<?php echo $data["Scores"]; ?>">
+		    <input type="submit" value="Valide"/>
+		</form>
 
-      echo "<h1>Match check</h1>";
+		<form method="post" action="../php/delete_match.php" enctype="multipart/form-data">
+		    <input type="hidden" name="id" value="<?php echo $data["ID"]; ?>">
+		    <input type="submit" value="Non Valide (DELETE)"/>
+		</form>
 
-      $num=1;
-      while($data=mysqli_fetch_assoc($req)){
-          $joueurs=explode(",",$data["Joueurs"]);
-          $scores=explode(",",$data["Scores"]);
-          echo '<div id="submission">';
-          echo '<h2>Submission '.$num.' :</h2>';
-          echo '<ins>Date :</ins> ';
-          echo $data["Date"];
-          echo '<br/>';
-          echo '<ins>Dispositif :</ins> ';
-          echo $data["Dispositif"];
-          echo '<br/>';
-          echo '<ins>Joueur / Score :</ins> <br/>';
-          for($i=0;$i<count($joueurs);$i++){
-              echo "fjc-00".$joueurs[$i]," : ",$scores[$i],"<br/>";
-          }
-          echo '<br/>';
-          echo '<form method="post" action="../php/validate_match.php" enctype="multipart/form-data">';
-          echo '<input type="hidden" name="joueurs" value="'.$data["Joueurs"].'">';
-          echo '<input type="hidden" name="id" value="'.$data["ID"].'">';
-          echo '<input type="hidden" name="scores" value="'.$data["Scores"].'">';
-          echo '<input type="submit" value="Valide"/>';
-          echo '</form>';
-          echo '<form method="post" action="../php/delete_match.php" enctype="multipart/form-data">';
-          echo '<input type="hidden" name="id" value="'.$data["ID"].'">';
-          echo '<input type="submit" value="Non Valide (DELETE)"/>';
-          echo '</form>';
-          echo '</div>';
-          $num++;
-      }
+            </div>
+	<?php endwhile; ?>
+	<?php mysqli_close($con); ?>
 
-      mysqli_close($con);
-      
-    ?>
-
-
-</body>
+    </body>
 </html>
