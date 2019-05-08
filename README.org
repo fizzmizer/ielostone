@@ -1,129 +1,122 @@
-* ielostone
-
-** Site officiel de la FJC (Fédération du Jeu du Caillou)
-
-- html : listes déroulantes avce liste de joueurs (+ matricule) et calcul des points après match
-- interaction avec la base de données
-
-** Quel format pour la base de donnée ?
-
-~<SAM>~
-
-+NOM (MATRICULE)+
-+[date, elo]+
-+[date, elo]+
-+[date, elo]+
-+[date, elo]+
-+[date, elo]+
-+[date, elo]+
-
-*** Proposition pour la base de données MYSQL :
-
-**** Trois tables : 
-   - Table SubmitTable
-     + Description : Regroupe l'ensemble des match soumis par les joueurs
-     + Permissions :
-       * Joueurs : Ajout de "match entry"
-       * Staff : Validation de "match entry" et suppression de ligne (invalide ou validée)
-     + Data non permanente (car modifiable et supprimable)
-     + Notes :
-       * Il y aura moyen de split les matricule grâce aux ";" (split(";") en python et explode(";") en php)
-       * Pour la colonne "validée" ça permet de trier les match à valider par le calcul d'elo et à n'afficher que ceux validé avec la database request
-
-   - Table PlayerTable
-     + Description : Regroupe l'ensemble des joueurs et leurs infos (matricule, ELO, etc...)
-     + Permissions :
-       * Joueurs : Vision par la page correspondante du site
-       * Staff : Modification
-     + Données permanente
-
-   - Table HistoryTable
-     + Description : Regroupe l'ensemble des matchs joués par chaque joueurs
-     + Permissions :
-       * Joueurs : Vision par la page correspondante du site
-       * Staff : Modification automatique après une validation de match (voir première table)
-     + Données permanente
-     + Notes : C'est une table intermédiaire qui permet très rapidement de faire le tri entre les joueurs et les match joués pour faire d'une pierre deux coup lors qu'on devra les afficher sur le site. Et ça évite de faire une table par joueurs ou de devoir modifier le nombre de colonne.
-
-**** Formes des Tables
-
-***** Submit
-      |----+---------------+------------------------+---------------------+---------------+---------|
-      | ID |          Date | Dispositif (optionnel) | Joueurs (matricule) | Scores        | Checked |
-      |----+---------------+------------------------+---------------------+---------------+---------|
-      | %d | %d (datetime) | %s                     | %varchar(255)       | %varchar(255) |   %bool |
-      |  1 |      24-12-19 | Brandelet              | 1;2;3               | 1;2;3         |       1 |
-      |  2 |      65-68-98 |                        | 2;3                 | 1;500         |       0 |
-      |----+---------------+------------------------+---------------------+---------------+---------|
-
-***** Player
-      |-----------+------+--------+--------+-------------+-------------|
-      | Matricule | Nom  | Prénom | ELO    | Approved    | Banned      |
-      |-----------+------+--------+--------+-------------+-------------|
-      | %int      | %s   | %s     | %int   | %bool (0 1) | %bool (0 1) |
-      | 1         | Duco | Ludo   | 123456 | 1           | 0           |
-      |-----------+------+--------+--------+-------------+-------------|
-
-***** History
-      |-----------+----------+------------|
-      | Matricule | SubmitID | ELOHistory |
-      |-----------+----------+------------|
-      |      %int |     %int |       %int |
-      |         1 |        2 |      21345 |
-      |         2 |        2 |      21300 |
-      |         1 |        1 |      21355 |
-      |         2 |        1 |         45 |
-      |         3 |        1 |      21104 |
-      |-----------+----------+------------|
-
-**** Utilisations typiques de la base de données avec ma proposition :
-   1. Situation 1
-      - But : Afficher la liste des joueurs :
-      - Process :
-	+ Get all entry from table *PlayerTable*
-      - Nombre de tables utilisées : 1
-   2. Situation 2
-      * But : Afficher l'historique du joueurs /fjc002/
-      * Process :
-	+ Get /ELO/ and /ID/ for /fjc002/ from tables *HistoryTable*
-	+ For each /ID/ dont /Checked==True/, get /all/ from table *SubmitTable*
-      * Nombre de tables utilisées : 2
-   3. Situation 3
-      - But : Soumission des matchs après une semaine de vacance prise par le staff
-      - Process :
-	* Get all entry from table *SubmitTable* dont /Checked==False/ et print les infos pour un check (automatique ou non, à toi de voir)
-	* For each joueur in explode(";",/Joueurs/), get /ELO/ from table *PlayerTable* and calculate /new_elo/
-	* modification de /ELO/ dans *PlayerTable* et add row in *HistoryTable* avec /ID/ (auto increment) et /Joueurs/
-      - Nombre de tables utilisées : 3
-   4. Situation 4
-      - But : Afficher l'ensemble des matchs joués
-      - Process :
-	* Get all entry from table *SubmitTable* dont /Checked==True/ et print les infos
-      - Nombre de tables utilisées : 1
-
-  Ça me semble assez bien otpimisé. Ça demande par contre d'avoir une database SQL.
-
-  ~<SAM/>~
-
-** le logiciel 
-   Encode date du match (avec calendrier) nom des 2 joueurs (ça va prendre automatiquement leur elo actuel), ça renvoie l'elo après match, modifie la base de données en conséquence
-
+* ielostone (Site officiel de la FJC (Fédération du Jeu du Caillou)
+  
 ** Après un match
    Remplir un document type à renvoyer à la fédération (version papier signée par les deux joueurs)avec : noms, type de partie jouée, lieu, remarques sur le match (pour les archives)
 
 ** Sur le site 
    publier les archives, le classement complet, les stats de chaque joueur : totale transparence
+** Base de données MYSQL :
+*** Trois tables : 
+  - Table SubmitTable
+    + Description : Regroupe l'ensemble des match soumis par les joueurs
+    + Permissions :
+      * Joueurs : Ajout de "match entry"
+      * Staff : Validation de "match entry" et suppression de ligne (invalide ou validée)
+    + Data non permanente (car modifiable et supprimable)
+    + Notes :
+      * Il y aura moyen de split les matricule grâce aux ";" (split(";") en python et explode(";") en php)
+      * Pour la colonne "validée" ça permet de trier les match à valider par le calcul d'elo et à n'afficher que ceux validé avec la database request
+
+  - Table PlayerTable
+    + Description : Regroupe l'ensemble des joueurs et leurs infos (matricule, ELO, etc...)
+    + Permissions :
+      * Joueurs : Vision par la page correspondante du site
+      * Staff : Modification
+    + Données permanente
+
+  - Table HistoryTable
+    + Description : Regroupe l'ensemble des matchs joués par chaque joueurs
+    + Permissions :
+      * Joueurs : Vision par la page correspondante du site
+      * Staff : Modification automatique après une validation de match (voir première table)
+    + Données permanente
+    + Notes : C'est une table intermédiaire qui permet très rapidement de faire le tri entre les joueurs et les match joués pour faire d'une pierre deux coup lors qu'on devra les afficher sur le site. Et ça évite de faire une table par joueurs ou de devoir modifier le nombre de colonne.
+
+*** Formes des Tables
+
+**** Submit
+     |----+---------------+------------------------+---------------------+---------------+---------|
+     | ID |          Date | Dispositif (optionnel) | Joueurs (matricule) | Scores        | Checked |
+     |----+---------------+------------------------+---------------------+---------------+---------|
+     | %d | %d (datetime) | %s                     | %varchar(255)       | %varchar(255) |   %bool |
+     |  1 |      24-12-19 | Brandelet              | 1;2;3               | 1;2;3         |       1 |
+     |  2 |      65-68-98 |                        | 2;3                 | 1;500         |       0 |
+     |----+---------------+------------------------+---------------------+---------------+---------|
+
+**** Player
+     |-----------+------+--------+--------+-------------+-------------|
+     | Matricule | Nom  | Prénom | ELO    | Approved    | Banned      |
+     |-----------+------+--------+--------+-------------+-------------|
+     | %int      | %s   | %s     | %int   | %bool (0 1) | %bool (0 1) |
+     | 1         | Duco | Ludo   | 123456 | 1           | 0           |
+     |-----------+------+--------+--------+-------------+-------------|
+
+**** History
+     |-----------+----------+------------|
+     | Matricule | SubmitID | ELOHistory |
+     |-----------+----------+------------|
+     |      %int |     %int |       %int |
+     |         1 |        2 |      21345 |
+     |         2 |        2 |      21300 |
+     |         1 |        1 |      21355 |
+     |         2 |        1 |         45 |
+     |         3 |        1 |      21104 |
+     |-----------+----------+------------|
+
+*** Utilisations typiques de la base de données avec ma proposition :
+  1. Situation 1
+     - But : Afficher la liste des joueurs :
+     - Process :
+       + Get all entry from table *PlayerTable*
+     - Nombre de tables utilisées : 1
+  2. Situation 2
+     * But : Afficher l'historique du joueurs /fjc002/
+     * Process :
+       + Get /ELO/ and /ID/ for /fjc002/ from tables *HistoryTable*
+       + For each /ID/ dont /Checked==True/, get /all/ from table *SubmitTable*
+     * Nombre de tables utilisées : 2
+  3. Situation 3
+     - But : Soumission des matchs après une semaine de vacance prise par le staff
+     - Process :
+       * Get all entry from table *SubmitTable* dont /Checked==False/ et print les infos pour un check (automatique ou non, à toi de voir)
+       * For each joueur in explode(";",/Joueurs/), get /ELO/ from table *PlayerTable* and calculate /new_elo/
+       * modification de /ELO/ dans *PlayerTable* et add row in *HistoryTable* avec /ID/ (auto increment) et /Joueurs/
+     - Nombre de tables utilisées : 3
+  4. Situation 4
+     - But : Afficher l'ensemble des matchs joués
+     - Process :
+       * Get all entry from table *SubmitTable* dont /Checked==True/ et print les infos
+     - Nombre de tables utilisées : 1
+
+ Ça me semble assez bien otpimisé. Ça demande par contre d'avoir une database SQL.
+
+ ~<SAM/>~
+
+*** Petit mémo pour créer les tables SQL de ielostone
+**** Submit
+  CREATE TABLE Submit ( ID int NOT NULL AUTO_INCREMENT, Date date NOT NULL, Joueurs varchar(255) NOT NULL, Scores varchar(255) NOT NULL, Dispositif varchar(255), Checked bit DEFAULT 0 NOT NULL, PRIMARY KEY (ID));
+
+**** Joueurs
+  CREATE TABLE Joueurs ( Matricule int NOT NULL AUTO_INCREMENT, Nom varchar(255) NOT NULL, Prenom varchar(255) NOT NULL, ELO int DEFAULT 1000 NOT NULL, Banned bit DEFAULT 0 NOT NULL, Approved bit DEFAULT 0 NOT NULL, PRIMARY KEY (Matricule));
+
+**** History (Associative table)
+  CREATE TABLE History ( Matricule int NOT NULL, SubmitID int NOT NULL, ELOHistory int NOT NULL, FOREIGN KEY (Matricule) REFERENCES Joueurs(Matricule), PRIMARY KEY (Matricule,SubmitID), FOREIGN KEY (SubmitID) REFERENCES Submit(ID));
 
 ** TODOLIST :
+*** TODO Page joueurs:
+**** TODO Voir la liste des match joués, en forme de liens
+**** TODO Voir le graphe de l'elo
+*** TODO Page de l'historique des matchs:
+**** Page général regroupant l'ensemble des matchs
+*** TODO Page d'un match 
+**** Liens de la page des joueurs sur les nom des participants
+**** Page donnant les détails d'un match
 *** Submit_page :
-**** TODO Options "nouveau joueur"
-     Est-ce qu'on fait une page pour s'inscrire et qu'on puisse pas choisir ne nouveaux joueurs ?
 **** TODO Version javascript
-     Pour plus de réactivité et éviter de reload la page quand on ajoute un nombre de joueur
+***** AJAX search pour les joueurs
+	Pour plus de réactivité et éviter de reload la page quand on ajoute un nombre de joueur
 **** TODO Ajouter un peu de css et de forme à tout ça
-
-
-** Calcul d'elo
+** Calcul d'elo (mémo)
 
    p1W = 1/(1+10^(elo2 - elo1)/400)
    p2W = 1/(1+10^(elo1 - elo2)/400)
