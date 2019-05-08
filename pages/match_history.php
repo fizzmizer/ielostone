@@ -3,7 +3,7 @@
     <title>Match History</title>
   </head>
   <body>
-    <a href=".../index.html">Back to index</a>
+    <a href="../index.html">Back to index</a>
     <h1>Match History</h1>
 
     <?php
