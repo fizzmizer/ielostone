@@ -13,8 +13,8 @@ for($i=1;$i<=$number_player;$i++){
     $scores[]=${"score".$i};
 }
 
-$joueurs_str = implode(";",$matricules);
-$scores_str = implode(";",$scores);
+$joueurs_str = implode(",",$matricules);
+$scores_str = implode(",",$scores);
 
 // DEBUG
 // echo strtotime($date);

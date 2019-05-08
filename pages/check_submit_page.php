@@ -16,8 +16,8 @@
       $req = mysqli_query($con,$sql) or die('Error SQL <br/>' .$sql.'<br/>'.mysqli_error($con));
       $num=1;
       while($data=mysqli_fetch_assoc($req)){
-          $joueurs=explode(";",$data["Joueurs"]);
-          $scores=explode(";",$data["Scores"]);
+          $joueurs=explode(",",$data["Joueurs"]);
+          $scores=explode(",",$data["Scores"]);
           echo '<div id="submission">';
           echo '<h2>Submission '.$num.' :</h2>';
           echo '<ins>Date :</ins> ';
